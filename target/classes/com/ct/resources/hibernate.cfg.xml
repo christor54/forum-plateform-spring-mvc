@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+		"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+		"http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+<!--     	Required for connection to Data Source  -->
+        <property name="hibernate.connection.driver_class">oracle.jdbc.driver.OracleDriver</property>
+        <property name="hibernate.connection.password">admin</property>
+        <property name="hibernate.connection.url">jdbc:oracle:thin:@localhost:1521:xe</property>
+        <property name="hibernate.connection.username">admin</property>
+        <property name="hibernate.dialect">org.hibernate.dialect.Oracle10gDialect</property>
+  
+<!--   		Print generate SQL statements to console -->
+   		<property name="hibernate.show_sql">true </property>
+   		
+<!--    	Generate Data Base tables from my hibernate mapping (hbm)-->
+   		<property name="hibernate.hbm2ddl.auto">update</property>
+   		
+<!--    	Using hbm -->
+<!--    		<mapping resource="com/ct/firsthibernate/domain/Employee.hbm.xml"/> -->
+   	
+<!--    	Using annotations -->
+   		<mapping class="com.ct.domain.Person"/>
+		<mapping class="com.ct.domain.Post"/>
+		<mapping class="com.ct.domain.Forum"/>
+    </session-factory>
+</hibernate-configuration>
