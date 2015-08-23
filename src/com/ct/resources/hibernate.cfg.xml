@@ -22,7 +22,7 @@
    	
 <!--    	Using annotations -->
    		<mapping class="com.ct.domain.Person"/>
-		<mapping class="com.ct.domain.Post"/>
-		<mapping class="com.ct.domain.Forum"/>
+ 		<mapping class="com.ct.domain.Forum"/>
+	 	<mapping class="com.ct.domain.Post"/>
     </session-factory>
 </hibernate-configuration>

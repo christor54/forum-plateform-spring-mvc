@@ -10,6 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 @Entity
 public class Person {
 	@Id
@@ -18,9 +20,11 @@ public class Person {
 	private int id; 
 	
 	@Column
+	@NotEmpty(message="Username can't be empty")
 	private String username;
 	
 	@Column
+	@NotEmpty(message="Password can't be empty")
 	private String password;
 	
 	@OneToMany(mappedBy="author")
@@ -37,12 +41,13 @@ public class Person {
 		super();
 		this.username = username;
 		this.password = password;
+		
 	}
 
 	@Override
 	public String toString() {
 		return "Person [id=" + id + ", username=" + username + ", password="
-				+ password + ", forums=" + forums + "]";
+				+ password;
 	}
 
 	public String getUsername() {

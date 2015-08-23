@@ -12,6 +12,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 @Entity
 public class Forum {
 	@Id
@@ -20,9 +22,11 @@ public class Forum {
 	private int id;
 
 	@Column
+	@NotEmpty (message="Title can't be empty")
 	private String title;
 
 	@Column
+	@NotEmpty (message="Description can't be empty")
 	private String description;
 
 	@Column
@@ -36,13 +40,22 @@ public class Forum {
 
 	public Forum() {
 		super();
+		this.dateCreated = new Date(); 
 	}
 
+	public Forum(String title, String description) {
+		super();
+		this.title = title;
+		this.description = description;
+		this.dateCreated = new Date(); 
+	}
+	
 	public Forum(String title, String description, Person author) {
 		super();
 		this.title = title;
 		this.description = description;
 		this.author = author;
+		this.dateCreated = new Date(); 
 	}
 
 	public Forum(String title, String description, Person author,
@@ -52,13 +65,14 @@ public class Forum {
 		this.description = description;
 		this.author = author;
 		this.posts = posts;
+		this.dateCreated = new Date(); 
 	}
 
 	@Override
 	public String toString() {
 		return "Forum [id=" + id + ", title=" + title + ", description="
 				+ description + ", dateCreated=" + dateCreated + ", author="
-				+ author + ", posts=" + posts + "]";
+				+ author ;
 	}
 
 	public int getId() {

@@ -4,63 +4,49 @@
 <html>
 <head>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" />
-<link rel="stylesheet" href="/OrderPizza/css/PizzaStore.css" />
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/myStyle.css" />
 
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Pizza Store</title>
+<title>Forum Plateform</title>
 </head>
 <body>
 
 	<div class="container">
 		<jsp:include page="menu.jsp"></jsp:include>
 
-		<form action="addPizza.do">
+		
 			<div class="well">
-
-				<h3>Size</h3>
-				<select name="size" class="form-control  ">
-					<c:forEach items="${pizzaSizes}" var="pizzaSize">
-						<option value="${pizzaSize.id}">${pizzaSize}</option>
-					</c:forEach>
-				</select>
-
-
-				<h3>Toppings</h3>
-
-				<ul id="check-list-box" class="list-group checked-list-box">
-					<c:forEach items="${pizzaToppings}" var="topping">
-						<li class="list-group-item"><label class='labelcb'> 
-						<input	type="checkbox" name="toppings" value="${topping.id}">
-								${topping}
-						</label></li>
-					</c:forEach>
-				</ul>
-				<br />
-				<input class="submit btn btn-primary col-xs-12"  type="submit" id="get-checked-data" value="Add	pizza to orders"></input>
-
+	
+				<h3>Forums</h3>
 				
-				<br>
-				<br>
-				<p>you current order, total :</p>
-				<c:if test="${not empty order.pizzas }">
+				<c:forEach items="${forums}" var="forum">
+					<form action="${pageContext.request.contextPath}/goToForumPage" >
+						<input type="hidden" name="forumId" value="${forum.id}" >
+					 	<input class="btn btn-default btn-forum" type="submit" name="${forum}" value="${forum.title}"/>
+					</form>
+				</c:forEach>
+<%-- 				<a href="goToForumPage/${forum.id}">${forum.title}</a> --%>
+				<h3>Add a forum</h3>
 				
-					<ul class="list-group">
-						<c:forEach items="${order.pizzas}" var="pizza">
-							<li class="list-group-item"><p class="text-left">${pizza} </p> <p class="text-right">10 $</p></li>
-						</c:forEach>
-					</ul>
-				</c:if>
+				<form:form class="form-horizontal " action="${pageContext.request.contextPath}/addForum" method="post" commandName="forum">
+					<p> Enter forum title :</p>
+					<form:errors class=" "path="title"/>
+					<form:input class="form-control" type="text" name="title" path="title"/> 
+					<br>
+					<p> Enter forum description :</p>
+<%-- 					<form:input class="form-control" type="textarea" rows="3" name="description" path="description"/> <form:errors path="description"/> --%>
+					<div class="has-error"><form:errors path="description" class="has-error"/></div>
+					<textarea class="form-control" rows="3" name="description" path="description"></textarea>
+					
+					<br> 
+					<input class="btn btn-primary" type="submit" value="Add Forum"/>
+				</form:form>
 				
-				<form action="submitOrder.do">
 				
-					<input disabled="disabled" type="submit" class="submit col-xs-12" value="Submit order" />
-				
-				</form>
 			</div>
-		</form>
 	</div>
 	<script src="/js/jquery-1.11.3.min.js"></script>
 	<script src="/js/checked-list.js"></script>

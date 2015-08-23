@@ -3,20 +3,72 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:tx="http://www.springframework.org/schema/tx"
 	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.2.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd">
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.1.xsd">
 	
-<!-- 	Only needed when performing validation  -->
-<!-- 	It enables annotation for validation   -->
-	<mvc:annotation-driven></mvc:annotation-driven>
+	
+
+
 	
 <!-- 	Scan for @Component + @Controller -->
 	<context:component-scan base-package="com.ct"></context:component-scan>
 	
+<!-- 	/************* MVC integration********************/ -->
+
+
 <!-- 	Define our InternalResourceResolver -->
 	<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="prefix" value="/WEB-INF/pages/"></property>
 		<property name="suffix" value=".jsp"></property>
 	</bean>
+	
+<!-- 	Only needed when performing validation  -->
+<!-- 	It enables annotation for validation   -->
+	<mvc:annotation-driven></mvc:annotation-driven>
+	
+<!-- 	Referencing local resources like CSS and JSfiles  -->
+	<mvc:resources mapping="/resources/**" location="/resources/"/>
+	
+<!-- 	/************* Hibernate integration********************/ -->
+
+	
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+		<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"/>
+		<property name="url" value="jdbc:oracle:thin:@localhost:1521:xe"/>
+		<property name="username" value="admin"/>
+		<property name="password" value="admin"/>
+	</bean>
+	
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"></property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect" > org.hibernate.dialect.Oracle10gDialect</prop>
+				<prop key="hibernate.show_sql" > true </prop>
+				<prop key="hibernate.hdm2ddl.auto" > create </prop>
+			</props>
+		</property>
+		
+<!-- 	Only looks for classes with JPA annotations -->
+		<property name="packagesToScan" value="com.ct.domain"></property>
+		
+	</bean>
+	
+	<bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	
+		<!-- 	Enable Tx annotations (Specifically @Transactional) -->
+	<tx:annotation-driven/>	
+	
+	
+	
+	<bean id="dao" class="com.ct.dao.Dao">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	
+
 </beans>
